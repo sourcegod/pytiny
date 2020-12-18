@@ -50,6 +50,14 @@ class Token(object):
     def __init__(self, tokenText, tokenKind):
         self.text = tokenText # the token's actual text
         self.kind = tokenKind # the token type
+    @staticmethod
+    def checkKeyword(self, tokenText):
+        for kind in TokenType:
+            # relies on all keyword enum values being 1XX
+            if kind.name == tokenText and kind.value >= 100 and kind.value < 200:
+                return kind
+        
+        return None
 
 #-------------------------------------------------------------------------------
 
@@ -165,6 +173,20 @@ class Lexer(object):
                     self.nextChar()
             tokText = self.source[startPos : self.curPos +1] # get the substring
             tok = Token(tokText, TokenType.NUMBER)
+        elif self.curChar.isalpha(): 
+            # Leading character is a letter, so this must be an identifier or a keyword
+            # Get all consecutive alpha numeric characters
+            startPos = self.curPos
+            while self.peek().isalnum():
+                self.nextChar()
+                
+            # Check is the token is in the list of keyword
+            tokText = self.source[startPos : self.curPos +1] # get the substring
+            keyword = Token.checkKeyword(self, tokText)
+            if keyword == None: # identifier
+                tok = Token(tokText, TokenType.IDENT)
+            else: # keyword
+                tok = Token(tokText, keyword)
 
         elif (self.curChar == '\n'): 
             tok = Token(self.curChar, TokenType.NEWLINE) # newline token 

@@ -85,12 +85,15 @@ class Lexer(object):
 
     # Skip comment in the code
     def skipComment(self):
-        pass
+        if self.curChar == '#':
+            while self.curChar != '\n':
+                self.nextChar()
 
     # Returns the next token
     def getToken(self):
         tok = None
         self.skipWhitespace()
+        self.skipComment()
         # check the first character of this token
         if (self.curChar == '+'): 
             tok = Token(self.curChar, TokenType.PLUS) # plus token
@@ -131,6 +134,37 @@ class Lexer(object):
                 tok = Token(lastChar + self.curChar, TokenType.NOTEQ) 
             else:
                 self.abort("Expected !=, got !" + self.peek())
+        elif (self.curChar == '\"'): 
+            # Get characters between quotations
+            self.nextChar()
+            startPos = self.curPos
+            while self.curChar != '\"':
+                # Don't allow special characters on this string. 
+                # No escape characters, newlines, tabs, or %.
+                # We will be using C's printf on this string.
+                if self.curChar == '\r' or self.curChar == '\n' or self.curChar == '\\' or self.curChar == '%':
+                    self.abort("Illegal character in string.")
+                self.nextChar()
+            
+            tokText = self.source[startPos:self.curPos]
+            tok = Token(tokText, TokenType.STRING)
+
+        elif self.curChar.isdigit(): 
+            # leading character is a digit, so this must be a number
+            # Get all consecutive digits and decimal is there is one.
+            startPos = self.curPos
+            while self.peek().isdigit():
+                self.nextChar()
+            if self.peek() == '.': # Decimal
+                self.nextChar()
+                # Must have at least one digit after decimal.
+                if not self.peek().isdigit():
+                    # error
+                    self.abort("Illegal character in number.")
+                while self.peek().isdigit():
+                    self.nextChar()
+            tokText = self.source[startPos : self.curPos +1] # get the substring
+            tok = Token(tokText, TokenType.NUMBER)
 
         elif (self.curChar == '\n'): 
             tok = Token(self.curChar, TokenType.NEWLINE) # newline token 

@@ -10,7 +10,7 @@
 from lexer import *
 
 def main():
-    input = "+- */ >>= = !="
+    input = "+-123 9.8654  \"This is a string\" # This a comment!\n */"
     lex = Lexer(input)
     token = lex.getToken()
     

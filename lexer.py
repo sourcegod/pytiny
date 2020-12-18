@@ -100,6 +100,38 @@ class Lexer(object):
             tok = Token(self.curChar, TokenType.ASTERISK) # Asterisk token
         elif (self.curChar == '/'): 
             tok = Token(self.curChar, TokenType.SLASH) # Slash token
+        elif (self.curChar == '='): 
+            # check whether this token is = or ==
+            if self.peek() == '=':
+                lastChar = self.curChar
+                self.nextChar()
+                tok = Token(lastChar + self.curChar, TokenType.EQEQ) 
+            else:
+                tok = Token(self.curChar, TokenType.EQ) 
+        elif (self.curChar == '>'): 
+            # check whether this token is > or >=
+            if self.peek() == '=':
+                lastChar = self.curChar
+                self.nextChar()
+                tok = Token(lastChar + self.curChar, TokenType.GTEQ) 
+            else:
+                tok = Token(self.curChar, TokenType.GT) 
+        elif (self.curChar == '<'): 
+            # check whether this token is < or <=
+            if self.peek() == '=':
+                lastChar = self.curChar
+                self.nextChar()
+                tok = Token(lastChar + self.curChar, TokenType.LTEQ) 
+            else:
+                tok = Token(self.curChar, TokenType.LT) 
+        elif (self.curChar == '!'): 
+            if self.peek() == '=':
+                lastChar = self.curChar
+                self.nextChar()
+                tok = Token(lastChar + self.curChar, TokenType.NOTEQ) 
+            else:
+                self.abort("Expected !=, got !" + self.peek())
+
         elif (self.curChar == '\n'): 
             tok = Token(self.curChar, TokenType.NEWLINE) # newline token 
         elif (self.curChar == '\0'): 

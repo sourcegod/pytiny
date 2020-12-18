@@ -10,7 +10,7 @@
 from lexer import *
 
 def main():
-    input = "+- */"
+    input = "+- */ >>= = !="
     lex = Lexer(input)
     token = lex.getToken()
     

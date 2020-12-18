@@ -7,15 +7,15 @@
     Date: Fri, 18/12/2020
 """
 
-
 from lexer import *
 
 def main():
-    input = "let foobar = 123"
+    input = "+- */"
     lex = Lexer(input)
+    token = lex.getToken()
     
-    while lex.peek() != '\0':
-        print(lex.curChar)
-        lex.nextChar()
+    while token.kind != TokenType.EOF:
+        print(token.kind)
+        token = lex.getToken()
 
 main()

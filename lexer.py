@@ -6,6 +6,52 @@
     Author: Coolbrother
     Date: Fri, 18/12/2020
 """
+import enum
+import sys
+
+# TokenType is our enum for all the types of tokens.
+class TokenType(enum.Enum):
+    EOF = -1
+    NEWLINE = 0
+    NUMBER = 1
+    IDENT = 2
+    STRING = 3
+
+    # keywords
+    LABEL = 101
+    GOTO = 102
+    PRINT = 103
+    INPUT = 104
+    LET = 105
+    IF = 106
+    THEN = 107
+    ENDIF = 108
+    WHILE = 109
+    REPEAT = 110
+    ENDWHILE = 111
+
+    # operators
+    EQ = 201
+    PLUS = 202
+    MINUS = 203
+    ASTERISK = 204
+    SLASH = 205
+    EQEQ = 206
+    NOTEQ = 207
+    LT = 208
+    LTEQ = 209
+    GT = 210
+    GTEQ = 211
+
+#-------------------------------------------------------------------------------
+
+# Token contains the original text and the type of token
+class Token(object):
+    def __init__(self, tokenText, tokenKind):
+        self.text = tokenText # the token's actual text
+        self.kind = tokenKind # the token type
+
+#-------------------------------------------------------------------------------
 
 class Lexer(object):
     def __init__(self, input):
@@ -30,11 +76,12 @@ class Lexer(object):
 
     # Invalid token found, print error message and exit
     def abort(self, message):
-        pass
+        sys.exit("Lexing error. " + message)
 
     # skip whitespace except newlines, which we will use to indicate the end of a statement
     def skipWhitespace(self):
-        pass
+        while self.curChar == ' ' or self.curChar == '\t' or self.curChar == '\r':
+            self.nextChar()
 
     # Skip comment in the code
     def skipComment(self):
@@ -42,5 +89,26 @@ class Lexer(object):
 
     # Returns the next token
     def getToken(self):
-        pass
+        tok = None
+        self.skipWhitespace()
+        # check the first character of this token
+        if (self.curChar == '+'): 
+            tok = Token(self.curChar, TokenType.PLUS) # plus token
+        elif (self.curChar == '-'): 
+            tok = Token(self.curChar, TokenType.MINUS) # minus token
+        elif (self.curChar == '*'): 
+            tok = Token(self.curChar, TokenType.ASTERISK) # Asterisk token
+        elif (self.curChar == '/'): 
+            tok = Token(self.curChar, TokenType.SLASH) # Slash token
+        elif (self.curChar == '\n'): 
+            tok = Token(self.curChar, TokenType.NEWLINE) # newline token 
+        elif (self.curChar == '\0'): 
+            tok = Token(self.curChar, TokenType.EOF) # EOF token
+        else:
+            # Unknown token
+            self.abort("Unknown token: " + self.curChar)
+        
+        self.nextChar()
+        return tok
 
+#-------------------------------------------------------------------------------

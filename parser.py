@@ -25,8 +25,9 @@ class Parser(object):
 
     # program ::= {statement}
     def program(self):
-        print("PROGRAM")
-        
+        self.emitter.headerLine("#include <stdio.h>")
+        self.emitter.headerLine("int main(void) {")
+
         # Since some newlines are required in our grammar, need to skip the excess.
         while self.checkToken(TokenType.NEWLINE):
             self.nextToken()
@@ -34,7 +35,10 @@ class Parser(object):
         # Parse all the statements in the program.
         while not self.checkToken(TokenType.EOF):
             self.statement()
-
+        # write things up
+        self.emitter.emitLine("return 0;")
+        self.emitter.emitLine("}")
+        #
         # Check that each label referenced in a GOTO is declared.
         for label in self.labelsGotoed:
             if label not in self.labelsDeclared:

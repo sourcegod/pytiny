@@ -51,7 +51,6 @@ class Parser(object):
         
         # "PRINT" (expression | string)
         if self.checkToken(TokenType.PRINT):
-            print("STATEMENT-PRINT")
             self.nextToken()
 
             if self.checkToken(TokenType.STRING):

@@ -8,14 +8,24 @@
 """
 
 from lexer import *
+from parser import *
+import sys
 
 def main():
-    input = "IF+-123 foo*THEN/"
-    lex = Lexer(input)
-    token = lex.getToken()
+    print("Pytiny Compiler")
+    if lensys.argv) != 2:
+        sys.exit("Error: Compiler needs source file as argument.")
+    with open(sys.argv[1], 'r') as inputFile:
+        input = inputFile.read()
     
-    while token.kind != TokenType.EOF:
-        print(token.kind)
-        token = lex.getToken()
+    # input = "IF+-123 foo*THEN/"
+    # Initialize the lexer
+    lex = Lexer(input)
+    parse = Parser(lex)
+
+    parse.program() # starts the parser
+
+    print("Parsing completed.")
+
 
 main()

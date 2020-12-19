@@ -8,6 +8,7 @@
 """
 
 from lexer import *
+from emitter import *
 from parser import *
 import sys
 
@@ -21,11 +22,12 @@ def main():
     # input = "IF+-123 foo*THEN/"
     # Initialize the lexer
     lex = Lexer(input)
-    parse = Parser(lex)
+    emit = Emitter("out.c")
+    parse = Parser(lex, emit)
 
     parse.program() # starts the parser
-
-    print("Parsing completed.")
+    emit.writeFile() # write the output to file
+    print("Compiling completed.")
 
 
 main()

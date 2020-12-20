@@ -1,0 +1,20 @@
+Pytiny changelog
+Date: Sun, 20/12/2020
+
+# Version 0.2
+Date: Sun, 20/12/2020
+-- Added reserved keywords in a dictionnary, and changed upercase keywords syntax to lowercase.
+-- Added (begin, end) as reserved keywords, and removed (endif, then, repeat, endwhile) keywords.
+-- Added line and col in Token class for better error message, 
+and moved *.py files in src directory.
+
+-- Updated file:  build.sh (to compile from "src" directory).
+
+#-------------------------------------------------------------------------------
+
+# Version 0.1
+Date: Sat, 19/12/2020
+-- First version near the Teeny Tiny Compiler tutorial.
+-- Updated file: README.md
+
+#-------------------------------------------------------------------------------

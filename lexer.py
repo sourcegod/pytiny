@@ -46,9 +46,20 @@ class TokenType(enum.Enum):
 #-------------------------------------------------------------------------------
 
 # keywords dictionnary
-keywords = {
-            "if": TokenType.IF
-        }
+keywords_dic = {
+        "label": TokenType.LABEL,
+        "goto": TokenType.GOTO,
+        "print": TokenType.PRINT,
+        "input": TokenType.INPUT,
+        "let": TokenType.LET,
+        "if": TokenType.IF,
+        "then": TokenType.THEN,
+        "endif": TokenType.ENDIF,
+        "while": TokenType.WHILE,
+        "repeat": TokenType.REPEAT,
+        "endwhile": TokenType.ENDWHILE,
+    }
+#-------------------------------------------------------------------------------
 # Token contains the original text and the type of token
 class Token(object):
     def __init__(self, tokenText, tokenKind):
@@ -57,12 +68,7 @@ class Token(object):
 
     @staticmethod
     def checkKeyword(self, tokenText):
-        for kind in TokenType:
-            # relies on all keyword enum values being 1XX
-            if kind.name == tokenText and kind.value >= 100 and kind.value < 200:
-                return kind
-        
-        return None
+        return keywords_dic.get(tokenText)
 
 #-------------------------------------------------------------------------------
 

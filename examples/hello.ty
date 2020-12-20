@@ -1,13 +1,13 @@
-PRINT "How many fibonacci numbers do you want?"
-INPUT nums
-PRINT ""
+print "How many fibonacci numbers do you want?"
+input nums
+print ""
 
-LET a = 0
-LET b = 1
-WHILE nums > 0 REPEAT
-    PRINT a
-    LET c = a + b
-    LET a = b
-    LET b = c
-    LET nums = nums - 1
-ENDWHILE
+let a = 0
+let b = 1
+while nums > 0 begin
+    print a
+    let c = a + b
+    let a = b
+    let b = c
+    let nums = nums - 1
+end

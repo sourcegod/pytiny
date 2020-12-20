@@ -44,12 +44,12 @@ class Parser(object):
             if label not in self.labelsDeclared:
                 self.abort("Attempting to GOTO to undeclared label: " + label)
 
-    # statement ::= "PRINT" (expression | string) nl
+    # statement ::= "print" (expression | string) nl
     # One of the following statements...
     def statement(self):
         # Check the first token to see what kind of statement this is.
         
-        # "PRINT" (expression | string)
+        # "print" (expression | string)
         if self.checkToken(TokenType.PRINT):
             self.nextToken()
 
@@ -64,43 +64,42 @@ class Parser(object):
                 self.expression()
                 self.emitter.emitLine("));")
 
-        # "IF" comparison "THEN" {statement} "ENDIF"
+        # "if" comparison "begin" {statement} "end"
         elif self.checkToken(TokenType.IF):
             self.nextToken()
             self.emitter.emit("if(")
             self.comparison()
 
-            self.match(TokenType.THEN)
+            self.match(TokenType.BEGIN)
             self.nl()
             self.emitter.emitLine("){")
 
             # Zero or more statements in the body.
-            while not self.checkToken(TokenType.ENDIF):
+            while not self.checkToken(TokenType.END):
                 self.statement()
 
-            self.match(TokenType.ENDIF)
+            self.match(TokenType.END)
             self.emitter.emitLine("}")
 
-        # "WHILE" comparison "REPEAT" {statement} "ENDWHILE"
+        # "while" comparison "begin" {statement} "end"
         elif self.checkToken(TokenType.WHILE):
             self.nextToken()
             self.emitter.emit("while(")
             self.comparison()
 
-            self.match(TokenType.REPEAT)
+            self.match(TokenType.BEGIN)
             self.nl()
             self.emitter.emitLine("){")
 
             # Zero or more statements in the loop body.
-            while not self.checkToken(TokenType.ENDWHILE):
+            while not self.checkToken(TokenType.END):
                 self.statement()
 
-            self.match(TokenType.ENDWHILE)
+            self.match(TokenType.END)
             self.emitter.emitLine("}")
 
-        # "LABEL" ident
+        # "label" ident
         elif self.checkToken(TokenType.LABEL):
-            print("STATEMENT-LABEL")
             self.nextToken()
 
             # Make sure this label doesn't already exist.
@@ -111,14 +110,14 @@ class Parser(object):
             self.emitter.emitLine(self.curToken.text + ":")
             self.match(TokenType.IDENT)
 
-        # "GOTO" ident
+        # "goto" ident
         elif self.checkToken(TokenType.GOTO):
             self.nextToken()
             self.labelsGotoed.add(self.curToken.text)
             self.emitter.emitLine("goto " + self.curToken.text + ";")
             self.match(TokenType.IDENT)
 
-        # "LET" ident "=" expression
+        # "let" ident "=" expression
         elif self.checkToken(TokenType.LET):
             self.nextToken()
 
@@ -134,7 +133,7 @@ class Parser(object):
             self.expression()
             self.emitter.emitLine(";")
 
-        # "INPUT" ident
+        # "input" ident
         elif self.checkToken(TokenType.INPUT):
             self.nextToken()
             

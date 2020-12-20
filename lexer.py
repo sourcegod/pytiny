@@ -24,11 +24,9 @@ class TokenType(enum.Enum):
     INPUT = 104
     LET = 105
     IF = 106
-    THEN = 107
-    ENDIF = 108
+    BEGIN = 107
+    END = 108
     WHILE = 109
-    REPEAT = 110
-    ENDWHILE = 111
 
     # operators
     EQ = 201
@@ -47,19 +45,18 @@ class TokenType(enum.Enum):
 
 # keywords dictionnary
 keywords_dic = {
-        "label": TokenType.LABEL,
+        "begin": TokenType.BEGIN,
+        "end": TokenType.END,
         "goto": TokenType.GOTO,
-        "print": TokenType.PRINT,
-        "input": TokenType.INPUT,
-        "let": TokenType.LET,
         "if": TokenType.IF,
-        "then": TokenType.THEN,
-        "endif": TokenType.ENDIF,
+        "input": TokenType.INPUT,
+        "label": TokenType.LABEL,
+        "let": TokenType.LET,
+        "print": TokenType.PRINT,
         "while": TokenType.WHILE,
-        "repeat": TokenType.REPEAT,
-        "endwhile": TokenType.ENDWHILE,
     }
 #-------------------------------------------------------------------------------
+
 # Token contains the original text and the type of token
 class Token(object):
     def __init__(self, tokenText, tokenKind):

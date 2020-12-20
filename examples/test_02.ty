@@ -1,0 +1,4 @@
+# test for label and goto
+label loop
+print "hello, world!"
+goto loop

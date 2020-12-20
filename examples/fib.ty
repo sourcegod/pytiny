@@ -1,13 +1,14 @@
-print "How many fibonacci numbers do you want?"
-input nums
+print "test for 40 fibonacci's first numbers"
 print ""
-
 let a = 0
 let b = 1
-while nums > 0 repeat
-    print a
-    let c = a + b
+while a < 102000000 begin
+    let temp = a
     let a = b
-    let b = c
-    let nums = nums - 1
-endwhile
+    let b = temp + b
+    print a
+end
+
+print ""
+print "Result: "
+print a

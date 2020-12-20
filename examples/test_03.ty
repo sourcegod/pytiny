@@ -1,0 +1,9 @@
+# test for nested condition
+let bar = 3
+let foo = bar * 3 + 2 
+if foo > 0 begin
+    print "yes!"
+    if 10 * 10 < 100 begin
+        print bar
+    end
+end

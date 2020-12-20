@@ -1,23 +1,20 @@
 #include <stdio.h>
 int main(void) {
-float nums;
 float a;
 float b;
-float c;
-printf("How many fibonacci numbers do you want?\n");
-if(0 == scanf("%f", &nums)) {
-nums = 0;
-scanf("%*s");
-}
+float temp;
+printf("test for 60 fibonacci's first numbers\n");
 printf("\n");
 a = 0;
 b = 1;
-while(nums>0){
-printf("%.2f\n", (float)(a));
-c = a+b;
+while(a<102000000){
+temp = a;
 a = b;
-b = c;
-nums = nums-1;
+b = temp+b;
+printf("%.2f\n", (float)(a));
 }
+printf("\n");
+printf("Result: \n");
+printf("%.2f\n", (float)(a));
 return 0;
 }

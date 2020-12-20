@@ -59,9 +59,11 @@ keywords_dic = {
 
 # Token contains the original text and the type of token
 class Token(object):
-    def __init__(self, tokenText, tokenKind):
+    def __init__(self, tokenText, tokenKind, line, col):
         self.text = tokenText # the token's actual text
         self.kind = tokenKind # the token type
+        self.line = line
+        self.col = col
 
     @staticmethod
     def checkKeyword(self, tokenText):
@@ -74,7 +76,12 @@ class Lexer(object):
         self.source = input + '\n' # source code to lex as string.
         self.curChar = '' # current character in the string.
         self.curPos = -1 # current position in the string
+        self.line =1
+        self.col =0
         self.nextChar()
+        
+    def addToken(self, text, kind):
+        return Token(text, kind, self.line, self.col)
 
     # process the next character
     def nextChar(self):
@@ -83,6 +90,7 @@ class Lexer(object):
             self.curChar = '\0' # eEOF
         else:
             self.curChar = self.source[self.curPos]
+            self.col += 1
 
     # returns the lookahead character
     def  peek(self):
@@ -92,7 +100,8 @@ class Lexer(object):
 
     # Invalid token found, print error message and exit
     def abort(self, message):
-        sys.exit("Lexing error. " + message)
+        sys.exit("LexError. line {}:{}, {}".format(self.line, 
+            self.col, message))
 
     # skip whitespace except newlines, which we will use to indicate the end of a statement
     def skipWhitespace(self):
@@ -112,42 +121,42 @@ class Lexer(object):
         self.skipComment()
         # check the first character of this token
         if (self.curChar == '+'): 
-            tok = Token(self.curChar, TokenType.PLUS) # plus token
+            tok = self.addToken(self.curChar, TokenType.PLUS) # plus token
         elif (self.curChar == '-'): 
-            tok = Token(self.curChar, TokenType.MINUS) # minus token
+            tok = self.addToken(self.curChar, TokenType.MINUS) # minus token
         elif (self.curChar == '*'): 
-            tok = Token(self.curChar, TokenType.ASTERISK) # Asterisk token
+            tok = self.addToken(self.curChar, TokenType.ASTERISK) # Asterisk token
         elif (self.curChar == '/'): 
-            tok = Token(self.curChar, TokenType.SLASH) # Slash token
+            tok = self.addToken(self.curChar, TokenType.SLASH) # Slash token
         elif (self.curChar == '='): 
             # check whether this token is = or ==
             if self.peek() == '=':
                 lastChar = self.curChar
                 self.nextChar()
-                tok = Token(lastChar + self.curChar, TokenType.EQEQ) 
+                tok = self.addToken(lastChar + self.curChar, TokenType.EQEQ) 
             else:
-                tok = Token(self.curChar, TokenType.EQ) 
+                tok = self.addToken(self.curChar, TokenType.EQ) 
         elif (self.curChar == '>'): 
             # check whether this token is > or >=
             if self.peek() == '=':
                 lastChar = self.curChar
                 self.nextChar()
-                tok = Token(lastChar + self.curChar, TokenType.GTEQ) 
+                tok = self.addToken(lastChar + self.curChar, TokenType.GTEQ) 
             else:
-                tok = Token(self.curChar, TokenType.GT) 
+                tok = self.addToken(self.curChar, TokenType.GT) 
         elif (self.curChar == '<'): 
             # check whether this token is < or <=
             if self.peek() == '=':
                 lastChar = self.curChar
                 self.nextChar()
-                tok = Token(lastChar + self.curChar, TokenType.LTEQ) 
+                tok = self.addToken(lastChar + self.curChar, TokenType.LTEQ) 
             else:
-                tok = Token(self.curChar, TokenType.LT) 
+                tok = self.addToken(self.curChar, TokenType.LT) 
         elif (self.curChar == '!'): 
             if self.peek() == '=':
                 lastChar = self.curChar
                 self.nextChar()
-                tok = Token(lastChar + self.curChar, TokenType.NOTEQ) 
+                tok = self.addToken(lastChar + self.curChar, TokenType.NOTEQ) 
             else:
                 self.abort("Expected !=, got !" + self.peek())
         elif (self.curChar == '\"'): 
@@ -163,7 +172,7 @@ class Lexer(object):
                 self.nextChar()
             
             tokText = self.source[startPos:self.curPos]
-            tok = Token(tokText, TokenType.STRING)
+            tok = self.addToken(tokText, TokenType.STRING)
 
         elif self.curChar.isdigit(): 
             # leading character is a digit, so this must be a number
@@ -180,7 +189,7 @@ class Lexer(object):
                 while self.peek().isdigit():
                     self.nextChar()
             tokText = self.source[startPos : self.curPos +1] # get the substring
-            tok = Token(tokText, TokenType.NUMBER)
+            tok = self.addToken(tokText, TokenType.NUMBER)
         elif self.curChar.isalpha(): 
             # Leading character is a letter, so this must be an identifier or a keyword
             # Get all consecutive alpha numeric characters
@@ -192,14 +201,16 @@ class Lexer(object):
             tokText = self.source[startPos : self.curPos +1] # get the substring
             keyword = Token.checkKeyword(self, tokText)
             if keyword == None: # identifier
-                tok = Token(tokText, TokenType.IDENT)
+                tok = self.addToken(tokText, TokenType.IDENT)
             else: # keyword
-                tok = Token(tokText, keyword)
+                tok = self.addToken(tokText, keyword)
 
         elif (self.curChar == '\n'): 
-            tok = Token(self.curChar, TokenType.NEWLINE) # newline token 
+            self.line +=1
+            self.col =1
+            tok = self.addToken(self.curChar, TokenType.NEWLINE) # newline token 
         elif (self.curChar == '\0'): 
-            tok = Token(self.curChar, TokenType.EOF) # EOF token
+            tok = self.addToken(self.curChar, TokenType.EOF) # EOF token
         else:
             # Unknown token
             self.abort("Unknown token: " + self.curChar)

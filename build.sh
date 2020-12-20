@@ -3,7 +3,7 @@
 ### Author: Coolbrother
 ### Date: Sat, 19/12/2020
 PYTHON="python3"
-COMPILER="pytiny.py"
+COMPILER="src/pytiny.py"
 CC="gcc"
 
 function comp {

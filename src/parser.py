@@ -252,6 +252,7 @@ class Parser(object):
 
 
     def abort(self, message):
-        sys.exit("Parser error. " + message)
+        sys.exit("ParseError. line {}:{}, {}".format(self.curToken.line, 
+            self.curToken.col, message))
 
 #-------------------------------------------------------------------------------

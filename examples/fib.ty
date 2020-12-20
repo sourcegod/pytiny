@@ -10,5 +10,5 @@ while a < 102000000 begin
 end
 
 print ""
-print "Result: "
+print "Total: "
 print a

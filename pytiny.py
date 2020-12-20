@@ -13,7 +13,7 @@ from parser import *
 import sys
 
 def main():
-    print("Pytiny Compiler")
+    print("Pytiny Compiler"\n)
     if len(sys.argv) != 2:
         sys.exit("Error: Compiler needs source file as argument.")
     with open(sys.argv[1], 'r') as inputFile:

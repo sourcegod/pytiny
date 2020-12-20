@@ -45,11 +45,16 @@ class TokenType(enum.Enum):
 
 #-------------------------------------------------------------------------------
 
+# keywords dictionnary
+keywords = {
+            "if": TokenType.IF
+        }
 # Token contains the original text and the type of token
 class Token(object):
     def __init__(self, tokenText, tokenKind):
         self.text = tokenText # the token's actual text
         self.kind = tokenKind # the token type
+
     @staticmethod
     def checkKeyword(self, tokenText):
         for kind in TokenType:

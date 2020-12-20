@@ -12,8 +12,8 @@ function comp {
     if [ $? -ne 0 ]; then
         echo "${TTOUTPUT}"
     else
-        mv out.c build/${BN}.c
-        CCOUTPUT=$(${CC} -o build/${BN} build/${BN}.c)
+        mv out.c c/${BN}.c
+        CCOUTPUT=$(${CC} -o build/${BN} c/${BN}.c)
         if [ $? -ne 0 ]; then
             echo "${CCOUTPUT}"
         else
